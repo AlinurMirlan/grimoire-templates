@@ -21,7 +21,7 @@ jobs:
         uses: aws-actions/aws-cloudformation-github-deploy@v1
         with:
           name: WebApiStack
-          template: ./template-web-api.yaml
+          template: ./../template-web-api.yaml
           parameter-overrides: >-
             AvailabilityZone=us-east-2,
             KeyPairName=grimoire-key-pair,
@@ -34,7 +34,7 @@ jobs:
         uses: aws-actions/aws-cloudformation-github-deploy@v1
         with:
           name: WebAppStack
-          template: ./template-web-app.yaml
+          template: ./../template-web-app.yaml
           parameter-overrides: >-
             BucketName=WebAppBucket,
             IndexDocument=index.html
