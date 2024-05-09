@@ -1,0 +1,19 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: S3 bucket for hosting a static website.
+
+Parameters:
+  BucketName:
+    Type: String
+    Description: The name of the S3 bucket.
+  IndexDocument:
+    Type: String
+    Description: The name of the index document.
+
+Resources:
+  S3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref BucketName
+      WebsiteConfiguration:
+        IndexDocument: !Ref IndexDocument
