@@ -10,6 +10,9 @@ jobs:
     name: Deploy CloudFormation Stack
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4.1.2
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -21,7 +24,7 @@ jobs:
         uses: aws-actions/aws-cloudformation-github-deploy@v1
         with:
           name: WebApiStack
-          template: ./../template-web-api.yaml
+          template: template-web-api.yaml
           parameter-overrides: >-
             AvailabilityZone=us-east-2,
             KeyPairName=grimoire-key-pair,
@@ -34,7 +37,7 @@ jobs:
         uses: aws-actions/aws-cloudformation-github-deploy@v1
         with:
           name: WebAppStack
-          template: ./../template-web-app.yaml
+          template: template-web-app.yaml
           parameter-overrides: >-
             BucketName=WebAppBucket,
             IndexDocument=index.html
