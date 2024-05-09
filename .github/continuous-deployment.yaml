@@ -1,0 +1,40 @@
+name: Deployment Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deploy CloudFormation Stack
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
+
+      - name: Deploy Web API Template to AWS CloudFormation
+        uses: aws-actions/aws-cloudformation-github-deploy@v1
+        with:
+          name: WebApiStack
+          template: template-web-api.yaml
+          parameter-overrides: >-
+            AvailabilityZone=us-east-2,
+            KeyPairName=grimoire-key-pair,
+            DynamoDbTableName=Book,
+            EC2InstanceName=WebApiInstance,
+            InstanceType=t2.micro,
+            AmiId=ami-09040d770ffe2224f
+
+      - name: Deploy Web App Template to AWS CloudFormation
+        uses: aws-actions/aws-cloudformation-github-deploy@v1
+        with:
+          name: WebAppStack
+          template: template-web-app.yaml
+          parameter-overrides: >-
+            BucketName=WebAppBucket,
+            IndexDocument=index.html
