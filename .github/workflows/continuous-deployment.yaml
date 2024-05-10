@@ -21,6 +21,7 @@ jobs:
           aws-region: us-east-2
 
       - name: Deploy Web API Template to AWS CloudFormation
+        continue-on-error: true
         uses: aws-actions/aws-cloudformation-github-deploy@v1
         with:
           name: WebApiStack
@@ -34,6 +35,7 @@ jobs:
             AmiId=ami-09040d770ffe2224f
 
       - name: Deploy Web App Template to AWS CloudFormation
+        continue-on-error: true
         uses: aws-actions/aws-cloudformation-github-deploy@v1
         with:
           name: WebAppStack
