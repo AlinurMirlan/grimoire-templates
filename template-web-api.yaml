@@ -4,7 +4,8 @@ Description: EC2 instane for housing a web API along with a DynamoDB table for s
 
 Parameters:
   AvailabilityZone:
-    Type: AWS::EC2::AvailabilityZone::Name
+    Type: String
+    Description: The name of the availability zone.
   AmiId:
     Type: String
     Description: The ID of the AMI.
