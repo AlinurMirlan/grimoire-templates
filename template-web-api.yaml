@@ -95,7 +95,7 @@ Resources:
       SecurityGroupIds:
         - !Ref SecurityGroupSSH
         - !Ref SecurityGroupServer
-      DependsOn: DynamoDBTable
+    DependsOn: DynamoDBTable
 
   SecurityGroupSSH:
     Type: AWS::EC2::SecurityGroup
