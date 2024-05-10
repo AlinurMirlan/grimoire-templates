@@ -88,13 +88,13 @@ Resources:
       InstanceType: !Ref InstanceType
       KeyName: !Ref KeyPairName
       IamInstanceProfile: !Ref IamInstanceProfile
+      Tags:
+        - Key: Name
+          Value: !Ref EC2InstanceName
       SecurityGroupIds:
         - !Ref SecurityGroupSSH
         - !Ref SecurityGroupServer
       DependsOn: DynamoDBTable
-    Tags:
-      - Key: Name
-        Value: !Ref EC2InstanceName
 
   SecurityGroupSSH:
     Type: AWS::EC2::SecurityGroup
