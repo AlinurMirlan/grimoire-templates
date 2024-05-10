@@ -41,5 +41,5 @@ jobs:
           name: WebAppStack
           template: template-web-app.yaml
           parameter-overrides: >-
-            BucketName=web-app-bucket,
+            BucketName=grimoire-web-app-bucket,
             IndexDocument=index.html
