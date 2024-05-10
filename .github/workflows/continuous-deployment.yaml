@@ -26,7 +26,7 @@ jobs:
           name: WebApiStack
           template: template-web-api.yaml
           parameter-overrides: >-
-            AvailabilityZone=us-east-2,
+            AvailabilityZone=us-east-2a,
             KeyPairName=grimoire-key-pair,
             DynamoDbTableName=Book,
             EC2InstanceName=WebApiInstance,
