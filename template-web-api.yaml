@@ -136,7 +136,7 @@ Resources:
         - AttributeName: "Isbn"
           KeyType: "HASH"
         - AttributeName: "Title"
-          KeyType: "Range"
+          KeyType: "RANGE"
       ProvisionedThroughput:
         ReadCapacityUnits: 5
         WriteCapacityUnits: 5
