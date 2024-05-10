@@ -39,5 +39,5 @@ jobs:
           name: WebAppStack
           template: template-web-app.yaml
           parameter-overrides: >-
-            BucketName=WebAppBucket,
+            BucketName=web-app-bucket,
             IndexDocument=index.html
