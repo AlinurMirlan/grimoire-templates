@@ -3,91 +3,21 @@ AWSTemplateFormatVersion: 2010-09-09
 Description: EC2 instane for housing a web API along with a DynamoDB table for storing books' data.
 
 Parameters:
-  AvailabilityZone:
-    Type: String
-    Description: The name of the availability zone.
-  AmiId:
-    Type: String
-    Description: The ID of the AMI.
-  KeyPairName:
-    Type: String
-    Description: The name of an existing Amazon EC2 key pair in this region to use to SSH into the Amazon EC2 instances.
   DynamoDbTableName:
     Type: String
     Description: The name of the DynamoDB table.
   EC2InstanceName:
     Type: String
     Description: The name of the EC2 instance.
-  InstanceType:
-    Type: String
-    Description: The type of the EC2 instance.
-    Default: t2.nano
-    AllowedValues:
-      - t2.nano
-      - t2.micro
-      - t2.small
-      - t2.medium
-      - t2.large
-      - t2.xlarge
-      - t2.2xlarge
-      - m4.large
-      - m4.xlarge
-      - m4.2xlarge
-      - m4.4xlarge
-      - m4.10xlarge
-      - m4.16xlarge
-      - m5.large
-      - m5.xlarge
-      - m5.2xlarge
-      - m5.4xlarge
-      - m5.12xlarge
-      - m5.24xlarge
-      - m5.metal
-      - m5a.large
-      - m5a.xlarge
-      - m5a.2xlarge
-      - m5a.4xlarge
-      - m5a.12xlarge
-      - m5a.24xlarge
-      - m5d.large
-      - m5d.xlarge
-      - m5d.2xlarge
-      - m5d.4xlarge
-      - m5d.12xlarge
-      - m5d.24xlarge
-      - m5d.metal
-      - m5ad.large
-      - m5ad.xlarge
-      - m5ad.2xlarge
-      - m5ad.4xlarge
-      - m5ad.12xlarge
-      - m5ad.24xlarge
-      - m5dn.large
-      - m5dn.xlarge
-      - m5dn.2xlarge
-      - m5dn.4xlarge
-      - m5dn.12xlarge
-      - m5dn.24xlarge
-      - m5dn.metal
-      - m5n.large
-      - m5n.xlarge
-      - m5n.2xlarge
-      - m5n.4xlarge
-      - m5n.12xlarge
-      - m5n.24xlarge
-      - m5n.metal
-      - m6g.large
-      - m6g.xlarge
-      - m6g.2
 
 Resources:
   EC2Instance:
     Type: AWS::EC2::Instance
     Properties:
-      AvailabilityZone: !Ref AvailabilityZone
-      ImageId: !Ref AmiId
-      InstanceType: !Ref InstanceType
-      KeyName: !Ref KeyPairName
+      AvailabilityZone: us-east-2a
+      ImageId: ami-09040d770ffe2224f
+      InstanceType: t2.nano
+      KeyName: grimoire-key-pair
       IamInstanceProfile: !Ref IamInstanceProfile
       Tags:
         - Key: Name

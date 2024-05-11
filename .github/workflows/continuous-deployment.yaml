@@ -27,12 +27,8 @@ jobs:
           template: template-web-api.yaml
           no-fail-on-empty-changeset: "1"
           parameter-overrides: >-
-            AvailabilityZone=us-east-2a,
-            KeyPairName=grimoire-key-pair,
             DynamoDbTableName=Book,
-            EC2InstanceName=WebApiInstance,
-            InstanceType=t2.micro,
-            AmiId=ami-09040d770ffe2224f
+            EC2InstanceName=WebApiInstance
 
       - name: Deploy Web App Template to AWS CloudFormation
         uses: aws-actions/aws-cloudformation-github-deploy@v1
@@ -41,5 +37,4 @@ jobs:
           template: template-web-app.yaml
           no-fail-on-empty-changeset: "1"
           parameter-overrides: >-
-            BucketName=grimoire-web-app-bucket,
-            IndexDocument=index.html
+            BucketName=grimoire-web-app-bucket
