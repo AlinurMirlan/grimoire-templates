@@ -4,11 +4,11 @@ Description: EC2 instane for housing a web API along with a DynamoDB table for s
 
 Parameters:
   AvailabilityZone:
-    Type: AWS::EC2::AvailabilityZone::Name
+    Type: String
+    Description: The name of the availability zone.
   AmiId:
-    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Type: String
     Description: The ID of the AMI.
-    Default: /aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2
   KeyPairName:
     Type: String
     Description: The name of an existing Amazon EC2 key pair in this region to use to SSH into the Amazon EC2 instances.
@@ -89,13 +89,13 @@ Resources:
       InstanceType: !Ref InstanceType
       KeyName: !Ref KeyPairName
       IamInstanceProfile: !Ref IamInstanceProfile
+      Tags:
+        - Key: Name
+          Value: !Ref EC2InstanceName
       SecurityGroupIds:
         - !Ref SecurityGroupSSH
         - !Ref SecurityGroupServer
-      DependsOn: DynamoDBTable
-    Tags:
-      - Key: Name
-        Value: !Ref EC2InstanceName
+    DependsOn: DynamoDBTable
 
   SecurityGroupSSH:
     Type: AWS::EC2::SecurityGroup
@@ -136,7 +136,7 @@ Resources:
         - AttributeName: "Isbn"
           KeyType: "HASH"
         - AttributeName: "Title"
-          KeyType: "Range"
+          KeyType: "RANGE"
       ProvisionedThroughput:
         ReadCapacityUnits: 5
         WriteCapacityUnits: 5
