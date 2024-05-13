@@ -77,13 +77,9 @@ Resources:
       AttributeDefinitions:
         - AttributeName: "Isbn"
           AttributeType: "S"
-        - AttributeName: "Title"
-          AttributeType: "S"
       KeySchema:
         - AttributeName: "Isbn"
           KeyType: "HASH"
-        - AttributeName: "Title"
-          KeyType: "RANGE"
       ProvisionedThroughput:
         ReadCapacityUnits: 5
         WriteCapacityUnits: 5
