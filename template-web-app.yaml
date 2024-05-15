@@ -30,3 +30,15 @@ Resources:
             Principal: "*"
             Action: s3:GetObject
             Resource: !Sub arn:aws:s3:::${S3Bucket}/*
+    CorsConfiguration:
+      CorsRules:
+        - AllowedOrigins:
+            - "*"
+          AllowedMethods:
+            - GET
+            - POST
+            - DELETE
+            - PUT
+          AllowedHeaders:
+            - "*"
+          ExposedHeaders: []
