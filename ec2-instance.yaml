@@ -1,14 +1,14 @@
 AWSTemplateFormatVersion: 2010-09-09
 
-Description: EC2 instane for housing a web API along with a DynamoDB table for storing books' data.
+Description: EC2 instane for housing a web API.
 
 Parameters:
-  DynamoDbTableName:
-    Type: String
-    Description: The name of the DynamoDB table.
   EC2InstanceName:
     Type: String
     Description: The name of the EC2 instance.
+  DyanmoDbAccessRoleStackName:
+    Type: String
+    Description: The name of the stack that contains the IAM role for accessing the DynamoDB table.
 
 Resources:
   EC2Instance:
@@ -42,7 +42,6 @@ Resources:
       SecurityGroupIds:
         - !Ref SecurityGroupSSH
         - !Ref SecurityGroupServer
-    DependsOn: DynamoDBTable
 
   SecurityGroupSSH:
     Type: AWS::EC2::SecurityGroup
@@ -68,38 +67,4 @@ Resources:
     Type: AWS::IAM::InstanceProfile
     Properties:
       Roles:
-        - !Ref DyanmoDbAccessRole
-
-  DynamoDBTable:
-    Type: AWS::DynamoDB::Table
-    Properties:
-      TableName: !Ref DynamoDbTableName
-      AttributeDefinitions:
-        - AttributeName: "Isbn"
-          AttributeType: "S"
-      KeySchema:
-        - AttributeName: "Isbn"
-          KeyType: "HASH"
-      ProvisionedThroughput:
-        ReadCapacityUnits: 5
-        WriteCapacityUnits: 5
-
-  DyanmoDbAccessRole:
-    Type: AWS::IAM::Role
-    Properties:
-      AssumeRolePolicyDocument:
-        Version: "2012-10-17"
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service: ec2.amazonaws.com
-            Action: sts:AssumeRole
-      Policies:
-        - PolicyName: DynamoDBAccess
-          PolicyDocument:
-            Version: "2012-10-17"
-            Statement:
-              - Effect: Allow
-                Action:
-                  - dynamodb:*
-                Resource: !GetAtt DynamoDBTable.Arn
+        - Fn::ImportValue: !Sub "${DyanmoDbAccessRoleStackName}-DyanmoDbAccessRoleName"
