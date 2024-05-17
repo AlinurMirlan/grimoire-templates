@@ -7,7 +7,7 @@ Parameters:
     Type: String
     Description: The name of the DynamoDB table.
 
-Resrouces:
+Resources:
   DynamoDBTable:
     Type: AWS::DynamoDB::Table
     Properties:
