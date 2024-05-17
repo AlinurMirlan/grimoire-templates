@@ -6,6 +6,9 @@ Parameters:
   PolicyName:
     Type: String
     Description: The name of the policy.
+  DynamoDbTableStackName:
+    Type: String
+    Description: The name of the stack that contains the DynamoDB table.
 
 Resources:
   DyanmoDbAccessRole:
@@ -26,7 +29,8 @@ Resources:
               - Effect: Allow
                 Action:
                   - dynamodb:*
-                Resource: !GetAtt DynamoDBTable.Arn
+                Resource:
+                  - Fn::ImportValue: !Sub "${DynamoDbTableStackName}-DynamoDbTabeArn"
 
 Outputs:
   DyanmoDbAccessRoleName:
