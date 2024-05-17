@@ -37,6 +37,7 @@ jobs:
           no-fail-on-empty-changeset: "1"
           parameter-overrides: >-
             PolicyName=grimoire-dynamodb-access-policy
+            DynamoDbTableStackName=GrimoireDynamoDbTable
 
       - name: Deploy EC2 Instance to AWS CloudFormation
         uses: aws-actions/aws-cloudformation-github-deploy@v1
