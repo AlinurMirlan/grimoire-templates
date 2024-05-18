@@ -1,0 +1,30 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: DynamoDB table for storing books' data.
+
+Parameters:
+  DynamoDbTableName:
+    Type: String
+    Description: The name of the DynamoDB table.
+
+Resources:
+  DynamoDBTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Ref DynamoDbTableName
+      AttributeDefinitions:
+        - AttributeName: "Isbn"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "Isbn"
+          KeyType: "HASH"
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+
+Outputs:
+  DynamoDbTabeArn:
+    Value: !GetAtt DynamoDBTable.Arn
+    Description: The ARN of the DynamoDB table.
+    Export:
+      Name: !Sub "${AWS::StackName}-DynamoDbTabeArn"
