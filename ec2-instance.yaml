@@ -6,7 +6,7 @@ Parameters:
   EC2InstanceName:
     Type: String
     Description: The name of the EC2 instance.
-  DyanmoDbAccessRoleStackName:
+  DynamoDbAccessRoleStackName:
     Type: String
     Description: The name of the stack that contains the IAM role for accessing the DynamoDB table.
 
@@ -67,4 +67,4 @@ Resources:
     Type: AWS::IAM::InstanceProfile
     Properties:
       Roles:
-        - Fn::ImportValue: !Sub "${DyanmoDbAccessRoleStackName}-DyanmoDbAccessRoleName"
+        - Fn::ImportValue: !Sub "${DynamoDbAccessRoleStackName}-DynamoDbAccessRoleName"

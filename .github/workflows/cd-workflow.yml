@@ -27,7 +27,7 @@ jobs:
           template: dynamodb-table.yaml
           no-fail-on-empty-changeset: "1"
           parameter-overrides: >-
-            DynamoDbTableName=grimoire-dynamodb-table
+            DynamoDbTableName=Book
 
       - name: Deploy DyamoDb Table Access IAM Role to AWS CloudFormation
         uses: aws-actions/aws-cloudformation-github-deploy@v1

@@ -11,7 +11,7 @@ Parameters:
     Description: The name of the stack that contains the DynamoDB table.
 
 Resources:
-  DyanmoDbAccessRole:
+  DynamoDbAccessRole:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
@@ -33,8 +33,8 @@ Resources:
                   - Fn::ImportValue: !Sub "${DynamoDbTableStackName}-DynamoDbTabeArn"
 
 Outputs:
-  DyanmoDbAccessRoleName:
-    Value: !Ref DyanmoDbAccessRole
+  DynamoDbAccessRoleName:
+    Value: !Ref DynamoDbAccessRole
     Description: The name of the IAM role.
     Export:
-      Name: !Sub "${AWS::StackName}-DyanmoDbAccessRoleName"
+      Name: !Sub "${AWS::StackName}-DynamoDbAccessRoleName"
