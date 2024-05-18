@@ -47,7 +47,7 @@ jobs:
           no-fail-on-empty-changeset: "1"
           parameter-overrides: >-
             EC2InstanceName=WebApiInstance,
-            DyanmoDbAccessRoleStackName=GrimoireDynamoDbAccessRole
+            DynamoDbAccessRoleStackName=GrimoireDynamoDbAccessRole
 
       - name: Deploy S3 Static Website Bucket to AWS CloudFormation
         uses: aws-actions/aws-cloudformation-github-deploy@v1
