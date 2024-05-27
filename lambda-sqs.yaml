@@ -1,0 +1,70 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Description: "Lambda function to receive messages from SQS with a dead letter queue"
+
+Parameters:
+  LambdaFunctionName:
+    Type: String
+    Description: "The name of the Lambda function"
+  SqsQueueName:
+    Type: String
+    Description: "The name of the SQS queue"
+  SqsDeadLetterQueueName:
+    Type: String
+    Description: "The name of the SQS dead letter queue"
+
+Resources:
+  LambdaExecutionRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service: "lambda.amazonaws.com"
+            Action: "sts:AssumeRole"
+      Policies:
+        - PolicyName: "LambdaExecutionPolicy"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "logs:CreateLogGroup"
+                  - "logs:CreateLogStream"
+                  - "logs:PutLogEvents"
+                Resource: "arn:aws:logs:*:*:*"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+
+  LambdaFunction:
+    Type: "AWS::Lambda::Function"
+    Properties:
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Code:
+        ImageUri: "public.ecr.aws/lambda/dotnet8:latest"
+      Runtime: "dotnet8"
+      Timeout: 30
+      MemorySize: 256
+
+  SqsQueue:
+    Type: "AWS::SQS::Queue"
+    Properties:
+      QueueName: !Ref SqsQueueName
+      RedrivePolicy:
+        deadLetterTargetArn: !GetAtt SqsDeadLetterQueue.Arn
+        maxReceiveCount: 3
+
+  SqsDeadLetterQueue:
+    Type: "AWS::SQS::Queue"
+    Properties:
+      QueueName: !Ref SqsDeadLetterQueueName
+
+  SqsQueueEventSourceMapping:
+    Type: "AWS::Lambda::EventSourceMapping"
+    Properties:
+      BatchSize: 10
+      EventSourceArn: !GetAtt SqsQueue.Arn
+      FunctionName: !Ref LambdaFunction
+      Enabled: true
