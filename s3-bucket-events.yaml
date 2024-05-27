@@ -1,0 +1,14 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: S3 bucket for storing event sourcing logs.
+
+Parameters:
+  BucketName:
+    Type: String
+    Description: The name of the S3 bucket.
+
+Resources:
+  S3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref BucketName
