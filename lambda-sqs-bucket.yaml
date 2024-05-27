@@ -1,11 +1,14 @@
 AWSTemplateFormatVersion: "2010-09-09"
 
-Description: "Lambda function to receive messages from SQS with a dead letter queue"
+Description: "Lambda function to receive messages from SQS with a dead letter queue and an S3 bucket."
 
 Parameters:
   LambdaFunctionName:
     Type: String
     Description: "The name of the Lambda function"
+  LambdaImageUri:
+    Type: String
+    Description: "The URI of the Lambda image"
   SqsQueueName:
     Type: String
     Description: "The name of the SQS queue"
@@ -48,7 +51,7 @@ Resources:
       PackageType: Image
       Role: !GetAtt LambdaExecutionRole.Arn
       Code:
-        ImageUri: "public.ecr.aws/lambda/dotnet8:latest"
+        ImageUri: !Ref LambdaImageUri
       Timeout: 90
       MemorySize: 256
 

@@ -66,6 +66,7 @@ jobs:
           no-fail-on-empty-changeset: "1"
           parameter-overrides: >-
             LambdaFunctionName=GrimoireLambdaFunction,
+            LambdaImageUri=public.ecr.aws/f8m6z4q4/grimoire-lambda:latest,
             SqsQueueName=GrimoireSqsQueue,
             SqsDeadLetterQueueName=GrimoireSqsDeadLetterQueue,
             BucketName=grimoire-event-sourcing-bucket
