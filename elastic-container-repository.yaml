@@ -9,11 +9,9 @@ Parameters:
 
 Resources:
   ECRRepository:
-    Type: AWS::ECR::Repository
+    Type: AWS::ECR::PublicRepository
     Properties:
       RepositoryName: !Ref ECRName
-      ImageScanningConfiguration:
-        scanOnPush: true
 
 Outputs:
   ECRRepositoryName:

@@ -71,7 +71,7 @@ jobs:
         uses: aws-actions/aws-cloudformation-github-deploy@v1
         with:
           name: GrimoireLambdaSQSEventSourcingSuite
-          template: ecr-lambda-sqs-bucket.yaml
+          template: lambda-sqs-bucket.yaml
           no-fail-on-empty-changeset: "1"
           parameter-overrides: >-
             LambdaFunctionName=GrimoireLambdaFunction,
