@@ -58,15 +58,6 @@ jobs:
           parameter-overrides: >-
             BucketName=grimoire-static-website-bucket
 
-      - name: Deploy Elastic Container Repository to AWS CloudFormation
-        uses: aws-actions/aws-cloudformation-github-deploy@v1
-        with:
-          name: GrimoireElasticContainerRepository
-          template: elastic-container-repository.yaml
-          no-fail-on-empty-changeset: "1"
-          parameter-overrides: >-
-            ECRName=grimoire-lambda
-
       - name: Deploy Lambda SQS Event Sourcing Suite to AWS CloudFormation
         uses: aws-actions/aws-cloudformation-github-deploy@v1
         with:
