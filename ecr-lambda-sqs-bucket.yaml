@@ -12,6 +12,12 @@ Parameters:
   SqsDeadLetterQueueName:
     Type: String
     Description: "The name of the SQS dead letter queue"
+  BucketName:
+    Type: String
+    Description: The name of the S3 bucket.
+  ECRName:
+    Type: String
+    Description: The name of the ECR repository.
 
 Resources:
   LambdaExecutionRole:
@@ -41,11 +47,13 @@ Resources:
   LambdaFunction:
     Type: "AWS::Lambda::Function"
     Properties:
+      FunctionName: !Ref LambdaFunctionName
+      PackageType: Image
       Role: !GetAtt LambdaExecutionRole.Arn
       Code:
         ImageUri: "public.ecr.aws/lambda/dotnet8:latest"
       Runtime: "dotnet8"
-      Timeout: 30
+      Timeout: 90
       MemorySize: 256
 
   SqsQueue:
@@ -68,3 +76,15 @@ Resources:
       EventSourceArn: !GetAtt SqsQueue.Arn
       FunctionName: !Ref LambdaFunction
       Enabled: true
+
+  S3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref BucketName
+
+  ECRRepository:
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: !Ref ECRName
+      ImageScanningConfiguration:
+        scanOnPush: true
