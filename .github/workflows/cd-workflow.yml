@@ -67,6 +67,6 @@ jobs:
           parameter-overrides: >-
             LambdaFunctionName=GrimoireLambdaFunction,
             SqsQueueName=GrimoireSqsQueue,
-            SqsDeadLetterQueueName=GrimoireSqsDeadLetterQueue
-            BucketName=grimoire-event-sourcing-bucket
+            SqsDeadLetterQueueName=GrimoireSqsDeadLetterQueue,
+            BucketName=grimoire-event-sourcing-bucket,
             ECRName=grimoire-lambda-function
