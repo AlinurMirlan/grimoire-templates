@@ -20,6 +20,19 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-2
 
+      - name: Deploy Lambda SQS Event Sourcing Suite to AWS CloudFormation
+        uses: aws-actions/aws-cloudformation-github-deploy@v1
+        with:
+          name: GrimoireLambdaSQSEventSourcingSuite
+          template: lambda-sqs-bucket.yaml
+          no-fail-on-empty-changeset: "1"
+          parameter-overrides: >-
+            LambdaFunctionName=GrimoireLambdaFunction,
+            LambdaImageUri=637423253196.dkr.ecr.us-east-2.amazonaws.com/grimoire-lambda:latest,
+            SqsQueueName=GrimoireSqsQueue,
+            SqsDeadLetterQueueName=GrimoireSqsDeadLetterQueue,
+            BucketName=grimoire-event-sourcing-bucket
+
       - name: Deploy DynamoDb Table to AWS CloudFormation
         uses: aws-actions/aws-cloudformation-github-deploy@v1
         with:
@@ -29,15 +42,16 @@ jobs:
           parameter-overrides: >-
             DynamoDbTableName=Book
 
-      - name: Deploy DyamoDb Table Access IAM Role to AWS CloudFormation
+      - name: Deploy IAM EC2 Access Roles to AWS CloudFormation
         uses: aws-actions/aws-cloudformation-github-deploy@v1
         with:
           name: GrimoireDynamoDbAccessRole
-          template: iam-role-dynamodb-access.yaml
+          template: iam-roles-ec2-instance.yaml
           no-fail-on-empty-changeset: "1"
           parameter-overrides: >-
             PolicyName=grimoire-dynamodb-access-policy,
-            DynamoDbTableStackName=GrimoireDynamoDbTable
+            DynamoDbAccessPolicyName=GrimoireDynamoDbTableAccessPolicy,
+            SQSAcessPolicyName=GrimoireSqsQueueAccessPolicy
 
       - name: Deploy EC2 Instance to AWS CloudFormation
         uses: aws-actions/aws-cloudformation-github-deploy@v1
@@ -57,16 +71,3 @@ jobs:
           no-fail-on-empty-changeset: "1"
           parameter-overrides: >-
             BucketName=grimoire-static-website-bucket
-
-      - name: Deploy Lambda SQS Event Sourcing Suite to AWS CloudFormation
-        uses: aws-actions/aws-cloudformation-github-deploy@v1
-        with:
-          name: GrimoireLambdaSQSEventSourcingSuite
-          template: lambda-sqs-bucket.yaml
-          no-fail-on-empty-changeset: "1"
-          parameter-overrides: >-
-            LambdaFunctionName=GrimoireLambdaFunction,
-            LambdaImageUri=637423253196.dkr.ecr.us-east-2.amazonaws.com/grimoire-lambda:latest,
-            SqsQueueName=GrimoireSqsQueue,
-            SqsDeadLetterQueueName=GrimoireSqsDeadLetterQueue,
-            BucketName=grimoire-event-sourcing-bucket

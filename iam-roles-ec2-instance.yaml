@@ -3,12 +3,18 @@ AWSTemplateFormatVersion: 2010-09-09
 Description: IAM role for accessing a DynamoDB table.
 
 Parameters:
-  PolicyName:
+  DynamoDbAccessPolicyName:
     Type: String
-    Description: The name of the policy.
+    Description: The name of the policy that allows access to the DynamoDB table
+  SQSAcessPolicyName:
+    Type: String
+    Description: The name of the policy that allows access to the SQS queue.
   DynamoDbTableStackName:
     Type: String
     Description: The name of the stack that contains the DynamoDB table.
+  SQSQueueStackName:
+    Type: String
+    Description: The name of the stack that contains the SQS queue.
 
 Resources:
   DynamoDbAccessRole:
@@ -22,7 +28,7 @@ Resources:
               Service: ec2.amazonaws.com
             Action: sts:AssumeRole
       Policies:
-        - PolicyName: !Ref PolicyName
+        - PolicyName: !Ref DynamoDbAccessPolicyName
           PolicyDocument:
             Version: "2012-10-17"
             Statement:
@@ -31,6 +37,27 @@ Resources:
                   - dynamodb:*
                 Resource:
                   - Fn::ImportValue: !Sub "${DynamoDbTableStackName}-DynamoDbTabeArn"
+
+  SQSAccessRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: !Ref SQSAcessPolicyName
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - sqs:*
+                Resource:
+                  - Fn::ImportValue: !Sub "${SQSQueueStackName}-SQSQueueArn"
 
 Outputs:
   DynamoDbAccessRoleName:
