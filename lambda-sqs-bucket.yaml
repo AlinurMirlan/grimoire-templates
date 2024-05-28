@@ -59,7 +59,7 @@ Resources:
       Role: !GetAtt LambdaExecutionRole.Arn
       Code:
         ImageUri: !Ref LambdaImageUri
-      Timeout: 90
+      Timeout: 30
       MemorySize: 256
 
   SqsQueue:
@@ -69,11 +69,13 @@ Resources:
       RedrivePolicy:
         deadLetterTargetArn: !GetAtt SqsDeadLetterQueue.Arn
         maxReceiveCount: 3
+      VisibilityTimeout: 120
 
   SqsDeadLetterQueue:
     Type: "AWS::SQS::Queue"
     Properties:
       QueueName: !Ref SqsDeadLetterQueueName
+      VisibilityTimeout: 120
 
   SqsQueueEventSourceMapping:
     Type: "AWS::Lambda::EventSourceMapping"
