@@ -65,3 +65,8 @@ Outputs:
     Description: The name of the IAM role.
     Export:
       Name: !Sub "${AWS::StackName}-DynamoDbAccessRoleName"
+  SQSAccesRoleName:
+    Value: !Ref SQSAccessRole
+    Description: The name of the IAM role.
+    Export:
+      Name: !Sub "${AWS::StackName}-SQSAccessRoleName"
