@@ -67,5 +67,4 @@ Resources:
     Type: AWS::IAM::InstanceProfile
     Properties:
       Roles:
-        - Fn::ImportValue: !Sub "${EC2IAMRolesStackName}-DynamoDbAccessRoleName"
-        - Fn::ImportValue: !Sub "${EC2IAMRolesStackName}-SQSAccessRoleName"
+        - Fn::ImportValue: !Sub "${EC2IAMRolesStackName}-EC2InstanceIAMRoleName"
