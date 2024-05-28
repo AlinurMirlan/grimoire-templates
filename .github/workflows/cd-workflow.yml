@@ -20,44 +20,6 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-2
 
-      - name: Deploy DynamoDb Table to AWS CloudFormation
-        uses: aws-actions/aws-cloudformation-github-deploy@v1
-        with:
-          name: GrimoireDynamoDbTable
-          template: dynamodb-table.yaml
-          no-fail-on-empty-changeset: "1"
-          parameter-overrides: >-
-            DynamoDbTableName=Book
-
-      - name: Deploy DyamoDb Table Access IAM Role to AWS CloudFormation
-        uses: aws-actions/aws-cloudformation-github-deploy@v1
-        with:
-          name: GrimoireDynamoDbAccessRole
-          template: iam-role-dynamodb-access.yaml
-          no-fail-on-empty-changeset: "1"
-          parameter-overrides: >-
-            PolicyName=grimoire-dynamodb-access-policy,
-            DynamoDbTableStackName=GrimoireDynamoDbTable
-
-      - name: Deploy EC2 Instance to AWS CloudFormation
-        uses: aws-actions/aws-cloudformation-github-deploy@v1
-        with:
-          name: GrimoireEC2Instance
-          template: ec2-instance.yaml
-          no-fail-on-empty-changeset: "1"
-          parameter-overrides: >-
-            EC2InstanceName=WebApiInstance,
-            DynamoDbAccessRoleStackName=GrimoireDynamoDbAccessRole
-
-      - name: Deploy S3 Static Website Bucket to AWS CloudFormation
-        uses: aws-actions/aws-cloudformation-github-deploy@v1
-        with:
-          name: GrimoireStaticWebsite
-          template: s3-bucket.yaml
-          no-fail-on-empty-changeset: "1"
-          parameter-overrides: >-
-            BucketName=grimoire-static-website-bucket
-
       - name: Deploy Lambda SQS Event Sourcing Suite to AWS CloudFormation
         uses: aws-actions/aws-cloudformation-github-deploy@v1
         with:
@@ -70,3 +32,43 @@ jobs:
             SqsQueueName=GrimoireSqsQueue,
             SqsDeadLetterQueueName=GrimoireSqsDeadLetterQueue,
             BucketName=grimoire-event-sourcing-bucket
+
+      - name: Deploy DynamoDb Table to AWS CloudFormation
+        uses: aws-actions/aws-cloudformation-github-deploy@v1
+        with:
+          name: GrimoireDynamoDbTable
+          template: dynamodb-table.yaml
+          no-fail-on-empty-changeset: "1"
+          parameter-overrides: >-
+            DynamoDbTableName=Book
+
+      - name: Deploy IAM EC2 Access Roles to AWS CloudFormation
+        uses: aws-actions/aws-cloudformation-github-deploy@v1
+        with:
+          name: EC2InstanceIAMRoles
+          template: iam-roles-ec2-instance.yaml
+          no-fail-on-empty-changeset: "1"
+          parameter-overrides: >-
+            DynamoDbTableStackName=GrimoireDynamoDbTable,
+            SQSQueueStackName=GrimoireLambdaSQSEventSourcingSuite,
+            DynamoDbAccessPolicyName=GrimoireDynamoDbTableAccessPolicy,
+            SQSAcessPolicyName=GrimoireSqsQueueAccessPolicy
+
+      - name: Deploy EC2 Instance to AWS CloudFormation
+        uses: aws-actions/aws-cloudformation-github-deploy@v1
+        with:
+          name: GrimoireEC2Instance
+          template: ec2-instance.yaml
+          no-fail-on-empty-changeset: "1"
+          parameter-overrides: >-
+            EC2InstanceName=WebApiInstance,
+            EC2IAMRolesStackName=EC2InstanceIAMRoles
+
+      - name: Deploy S3 Static Website Bucket to AWS CloudFormation
+        uses: aws-actions/aws-cloudformation-github-deploy@v1
+        with:
+          name: GrimoireStaticWebsite
+          template: s3-bucket.yaml
+          no-fail-on-empty-changeset: "1"
+          parameter-overrides: >-
+            BucketName=grimoire-static-website-bucket

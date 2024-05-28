@@ -48,6 +48,13 @@ Resources:
                   - "sqs:GetQueueAttributes"
                   - "sqs:GetQueueUrl"
                 Resource: !GetAtt SqsQueue.Arn
+              - Effect: "Allow"
+                Action:
+                  - "s3:PutObject"
+                  - "s3:GetObject"
+                  - "s3:ListBucket"
+                Resource: !Sub "arn:aws:s3:::${BucketName}/*"
+
       ManagedPolicyArns:
         - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 
@@ -89,3 +96,19 @@ Resources:
     Type: AWS::S3::Bucket
     Properties:
       BucketName: !Ref BucketName
+
+Outputs:
+  LambdaFunctionArn:
+    Description: "The ARN of the Lambda function"
+    Value: !GetAtt LambdaFunction.Arn
+  SQSQueueArn:
+    Description: "The ARN of the SQS queue"
+    Value: !GetAtt SqsQueue.Arn
+    Export:
+      Name: !Sub "${AWS::StackName}-SQSQueueArn"
+  SqsDeadLetterQueueArn:
+    Description: "The ARN of the SQS dead letter queue"
+    Value: !GetAtt SqsDeadLetterQueue.Arn
+  S3BucketArn:
+    Description: "The ARN of the S3 bucket"
+    Value: !GetAtt S3Bucket.Arn
