@@ -3,12 +3,9 @@ AWSTemplateFormatVersion: 2010-09-09
 Description: IAM role for accessing a DynamoDB table.
 
 Parameters:
-  DynamoDbAccessPolicyName:
+  EC2InstancePolicyName:
     Type: String
-    Description: The name of the policy that allows access to the DynamoDB table
-  SQSAcessPolicyName:
-    Type: String
-    Description: The name of the policy that allows access to the SQS queue.
+    Description: The name of the policy to attach to the EC2 instance IAM role.
   DynamoDbTableStackName:
     Type: String
     Description: The name of the stack that contains the DynamoDB table.
@@ -17,7 +14,7 @@ Parameters:
     Description: The name of the stack that contains the SQS queue.
 
 Resources:
-  DynamoDbAccessRole:
+  EC2InstanceIAMRole:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
@@ -37,22 +34,6 @@ Resources:
                   - dynamodb:*
                 Resource:
                   - Fn::ImportValue: !Sub "${DynamoDbTableStackName}-DynamoDbTabeArn"
-
-  SQSAccessRole:
-    Type: AWS::IAM::Role
-    Properties:
-      AssumeRolePolicyDocument:
-        Version: "2012-10-17"
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service: ec2.amazonaws.com
-            Action: sts:AssumeRole
-      Policies:
-        - PolicyName: !Ref SQSAcessPolicyName
-          PolicyDocument:
-            Version: "2012-10-17"
-            Statement:
               - Effect: Allow
                 Action:
                   - sqs:*
@@ -60,13 +41,8 @@ Resources:
                   - Fn::ImportValue: !Sub "${SQSQueueStackName}-SQSQueueArn"
 
 Outputs:
-  DynamoDbAccessRoleName:
-    Value: !Ref DynamoDbAccessRole
-    Description: The name of the IAM role.
+  EC2InstanceIAMRoleName:
+    Value: !Ref EC2InstanceIAMRole
+    Description: The name of the EC2 instance IAM role.
     Export:
-      Name: !Sub "${AWS::StackName}-DynamoDbAccessRoleName"
-  SQSAccesRoleName:
-    Value: !Ref SQSAccessRole
-    Description: The name of the IAM role.
-    Export:
-      Name: !Sub "${AWS::StackName}-SQSAccessRoleName"
+      Name: !Sub "${AWS::StackName}-EC2InstanceIAMRoleName"

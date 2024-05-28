@@ -51,8 +51,7 @@ jobs:
           parameter-overrides: >-
             DynamoDbTableStackName=GrimoireDynamoDbTable,
             SQSQueueStackName=GrimoireLambdaSQSEventSourcingSuite,
-            DynamoDbAccessPolicyName=GrimoireDynamoDbTableAccessPolicy,
-            SQSAcessPolicyName=GrimoireSqsQueueAccessPolicy
+            EC2InstancePolicyName=EC2InstancePolicy
 
       - name: Deploy EC2 Instance to AWS CloudFormation
         uses: aws-actions/aws-cloudformation-github-deploy@v1
